@@ -9,7 +9,7 @@ from langchain.vectorstores import FAISS
 from langchain.embeddings.openai import OpenAIEmbeddings
 from dotenv import load_dotenv
 import os
-from langchain.chat_models import OpenAI
+from langchain.llms import OpenAI
 
 load_dotenv()
 
@@ -69,3 +69,4 @@ if st.button("Get Answer"):
             answer = result.get("output_text") if isinstance(result, dict) else str(result)
             st.success("Answer:")
             st.write(answer)
+
