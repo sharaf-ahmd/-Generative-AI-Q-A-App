@@ -26,6 +26,16 @@ A web application that allows users to ask questions about **Generative AI** and
 
 ---
 
+
+genai-qa-app/
+│
+├─ streamlit_app.py       # Main Streamlit application
+├─ README.md              # Project documentation
+├─ requirements.txt       # Python dependencies (optional)
+└─ .env                   # Stores API keys securely
+
+---
+
 ## 🔧 Installation
 
 1. Clone this repository:
@@ -36,9 +46,3 @@ cd genai-qa-app
 ---
 
 
-genai-qa-app/
-│
-├─ streamlit_app.py       # Main Streamlit application
-├─ README.md              # Project documentation
-├─ requirements.txt       # Python dependencies (optional)
-└─ .env                   # Stores API keys securely
