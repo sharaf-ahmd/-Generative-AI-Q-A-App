@@ -7,29 +7,31 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain.chains import create_retrieval_chain
 from langchain.vectorstores import FAISS
 from langchain.embeddings.openai import OpenAIEmbeddings
-from langchain.llms import OpenAI
 from dotenv import load_dotenv
 import os
+from langchain.chat_models import OpenAI
 
-# Load environment variables
 load_dotenv()
+
+
+llm = OpenAI(temperature=0) 
 api_key = os.getenv("OPENAI_API_KEY")
 
-# Initialize LLM (v0.3.27 style)
-llm = OpenAI(temperature=0, openai_api_key=api_key)
+
 
 # Load the website as a document
+
 url = "https://www.geeksforgeeks.org/artificial-intelligence/what-is-generative-ai/?"
 loader = WebBaseLoader(url)
-docs = loader.load()
+docs = loader.load()  
 
-# Optional: clean docs by keeping only page_content
-clean_docs = [Document(page_content=doc.page_content) for doc in docs]
+
 
 # Create a vector store for retrieval
-embeddings = OpenAIEmbeddings(openai_api_key=api_key)
-db = FAISS.from_documents(clean_docs, embeddings)
+embeddings = OpenAIEmbeddings()
+db = FAISS.from_documents(docs, embeddings)
 retriever = db.as_retriever()
+
 
 # Create a prompt template and document chain
 prompt = ChatPromptTemplate.from_template("""
@@ -50,7 +52,9 @@ doc_chain = create_stuff_documents_chain(llm, prompt)
 # Create retrieval chain
 ret_chain = create_retrieval_chain(retriever, doc_chain)
 
+
 # Streamlit UI
+
 st.title("Generative AI Q&A App")
 st.write("Ask questions about Generative AI based on GeeksforGeeks article!")
 
@@ -61,11 +65,6 @@ if st.button("Get Answer"):
         st.warning("Please enter a question.")
     else:
         with st.spinner("Fetching answer..."):
-            # Invoke the retrieval chain
-            result = ret_chain.invoke({"input": question})
-            
-            # Ensure the answer is a clean string
-            answer = result.get("output_text") if isinstance(result, dict) else str(result)
-            
+            answer = ret_chain.invoke({"input": question})
             st.success("Answer:")
             st.write(answer)
