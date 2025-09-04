@@ -9,7 +9,7 @@ from langchain.vectorstores import FAISS
 from langchain.embeddings.openai import OpenAIEmbeddings
 from dotenv import load_dotenv
 import os
-from langchain.llms import OpenAI
+from langchain.chat_models import OpenAI
 
 load_dotenv()
 
@@ -23,8 +23,9 @@ api_key = os.getenv("OPENAI_API_KEY")
 
 url = "https://www.geeksforgeeks.org/artificial-intelligence/what-is-generative-ai/?"
 loader = WebBaseLoader(url)
-docs = loader.load()  
+doc1 = loader.load()  
 
+docs = [Document(page_content=doc.page_content) for doc in doc1]
 
 # Create a vector store for retrieval
 embeddings = OpenAIEmbeddings()
@@ -34,8 +35,10 @@ retriever = db.as_retriever()
 
 # Create a prompt template and document chain
 prompt = ChatPromptTemplate.from_template("""
-Use the context below to answer the question. 
-If the answer is not in the context, say "I don't know."
+Answer the question **in a clear and concise format** based on the context below.
+- Only include relevant information.
+- Remove menus, ads, or unrelated text.
+- Keep paragraphs short.
 
 <context>
 {context}
@@ -61,8 +64,8 @@ if st.button("Get Answer"):
     if question.strip() == "":
         st.warning("Please enter a question.")
     else:
-        with st.spinner("Fetching answer..."):
-            answer = ret_chain.invoke({"input": question})
+         with st.spinner("Fetching answer..."):
+            result = ret_chain.invoke({"input": question})
+            answer = result.get("output_text") if isinstance(result, dict) else str(result)
             st.success("Answer:")
             st.write(answer)
-
