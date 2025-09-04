@@ -65,7 +65,8 @@ if st.button("Get Answer"):
         st.warning("Please enter a question.")
     else:
         with st.spinner("Fetching answer..."):
-            answer = ret_chain.invoke({"input": question})
+            response = ret_chain.invoke({"input": question})
             st.success("Answer:")
-            st.write(answer)
+            st.write(response['answer'])
+
 
