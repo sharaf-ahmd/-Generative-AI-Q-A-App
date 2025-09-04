@@ -1,0 +1,15 @@
+streamlit>=1.30.0
+langchain==0.3.27
+python-dotenv
+langchain-community==0.3.27
+pypdf
+beautifulsoup4
+arxiv
+langchain-text-splitters
+langchain-openai
+chromadb>=0.3.28
+sentence-transformers
+langchain-huggingface
+faiss-cpu==1.12.0
+langchain-chroma>=0.2.5
+numpy>=1.25.0,<3.0
